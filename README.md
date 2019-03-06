@@ -27,7 +27,7 @@ library(gbm)  # boosted trees
 
 ## Data
 
-Here we load the data retrieved from the University of California - Irvine (UCI) Machine Learning Repository. The source tells us that the data contains customer information related to direct marketing campaigns of a Portuguese banking institution. The marketing campaigns were based on phone calls. Often, more than one contact to the same client was required, in order to access if the product (bank term deposit) would be 'yes' to subscribe or 'no' not to subscribe. <br><br>
+Here we load the data retrieved from the University of California - Irvine (UCI) Machine Learning Repository. The source tells us that the data contains customer information related to direct marketing campaigns of a Portuguese banking institution. The marketing campaigns were based on phone calls. Often, more than one contact to the same client was required, in order to access if the product (bank term deposit) would be 'yes' to subscribe or 'no' not to subscribe.
 
 ```{r}
 ## load data
@@ -45,7 +45,7 @@ mkt_cmpgn_data = read.table("./bank-additional/bank-additional-full.csv",
 
 <h4> Feature Names </h4>
 
-After the data has been loaded, we briefly inspect the data frame by viewing the feature names by calling the 'names( )' function. <br><br>
+After the data has been loaded, we briefly inspect the data frame by viewing the feature names by calling the 'names( )' function.
 
 ```{r}
 ## view feature names
@@ -55,7 +55,7 @@ names(mkt_cmpgn_data)
 
 <h4> Dimensions </h4>
 
-Next, we view the number of observations and features contained within the data frame by calling the 'dim( )' function. Here we see that there are 41,188 observations and 21 features, which we know the names of from the previous section. <br><br>
+Next, we view the number of observations and features contained within the data frame by calling the 'dim( )' function. Here we see that there are 41,188 observations and 21 features, which we know the names of from the previous section.
 
 ```{r}
 ## view data frame dimension
@@ -65,7 +65,7 @@ dim(mkt_cmpgn_data)
 
 <h4> Preview Observations </h4>
 
-After, we preview the first few observations to get a more nuanced understanding of what is contained within the data frame by calling the 'head( )' function. <br><br>
+After, we preview the first few observations to get a more nuanced understanding of what is contained within the data frame by calling the 'head( )' function.
 
 ```{r}
 ## preview observations
@@ -77,7 +77,7 @@ head(mkt_cmpgn_data, 5)
 
 <h4> Feature Selection </h4>
 
-After inspecting the data (and the meta data), we remove the features 'duration', 'day_of_week', 'month' and 'nr.employed'. These features are removed, as they contain information collected after contact has already been made with the client and are highly correlated to the predicted outcome of whether the client subscribed for a term deposit. Conceptually, this is a "look ahead" into the future test set and is highly inappropriate in any prediction setting. <br><br>
+After inspecting the data (and the meta data), we remove the features 'duration', 'day_of_week', 'month' and 'nr.employed'. These features are removed, as they contain information collected after contact has already been made with the client and are highly correlated to the predicted outcome of whether the client subscribed for a term deposit. Conceptually, this is a "look ahead" into the future test set and is highly inappropriate in any prediction setting.
 
 ```{r}
 ## remove feats
@@ -90,7 +90,7 @@ mkt_cmpgn_data$nr.employed = NULL
 
 <h4> Missingness </h4>
 
-Here we replace the character string 'unknown' with NA. Subsequently, we remove those observations containing missing values by utilizing the 'na.omit( )' function. Then, we inspect the data frame dimension as an ad hoc measurement of missingness. Recall that the original data frame dimension contained 41,188 observations and 21 features. After removing the previous 4 features and observations containing NA's, the data frame now contains 30,488 observations and 17 features. <br><br> 
+Here we replace the character string 'unknown' with NA. Subsequently, we remove those observations containing missing values by utilizing the 'na.omit( )' function. Then, we inspect the data frame dimension as an ad hoc measurement of missingness. Recall that the original data frame dimension contained 41,188 observations and 21 features. After removing the previous 4 features and observations containing NA's, the data frame now contains 30,488 observations and 17 features. 
 
 ```{r}
 ## replace 'unknown' char string in the data with na
@@ -108,7 +108,7 @@ dim(mkt_cmpgn_data)
 
 <b> Binary </b>
 
-Consider that Trees based methods are best applied by ordered categorical values. Therefore, we reduce the 'job' feature, which contains multiple job titles to contain only two values, either employed or unemployed. Similarly, we apply the same transformation to the 'marital' feature, which contains multiple marital status, to either married or single. <br><br>
+Consider that Trees based methods are best applied by ordered categorical values. Therefore, we reduce the 'job' feature, which contains multiple job titles to contain only two values, either employed or unemployed. Similarly, we apply the same transformation to the 'marital' feature, which contains multiple marital status, to either married or single.
 
 ```{r}
 ## convert 'job' feat to char string data type for transformation
@@ -128,7 +128,7 @@ mkt_cmpgn_data$marital[mkt_cmpgn_data$marital != "married"] = "single"
 
 <b> Ordinal </b><br>
 
-In addition, we transform the 'education' feature to a hierarchical ordered numeric dummy feature, taking 6 increasing values commensurate with the levels of education observed. Here we assign the 'illiterate' values to 0, the 'basic.4y' to 1, 'basic.6y' to 2, 'basic.9y' to 3, 'high.school' to 4, 'professional.course' to 5, and 'university.degree' to 6. As a final step in this transformation, we convert the feature 'education' to numeric. <br><br>
+In addition, we transform the 'education' feature to a hierarchical ordered numeric dummy feature, taking 6 increasing values commensurate with the levels of education observed. Here we assign the 'illiterate' values to 0, the 'basic.4y' to 1, 'basic.6y' to 2, 'basic.9y' to 3, 'high.school' to 4, 'professional.course' to 5, and 'university.degree' to 6. As a final step in this transformation, we convert the feature 'education' to numeric.
 
 ```{r}
 ## convert 'education' feat to char string data type for transformation
@@ -153,7 +153,7 @@ mkt_cmpgn_data$education = as.numeric(mkt_cmpgn_data$education)
 
 <h4> Data Types </h4>
 
-Recall that the 'tree( )' function in R only takes numeric and factor data types as inputs. Therefore, we transform any and all character features in the data frame into factors. One way to achieve this is to utilize the 'as.factor( )' to manually transform the data type for each feature in the data frame. However, we know that as a default, R treats all features containing character strings as factors unless specified otherwise. We utilize this aspect of the programming language in this example to quickly convert all features containing character strings to factors by with the 'unclass( )' function and returning the result to the original data frame. After, we confirm that the data types have been converted correctly. <br><br>
+Recall that the 'tree( )' function in R only takes numeric and factor data types as inputs. Therefore, we transform any and all character features in the data frame into factors. One way to achieve this is to utilize the 'as.factor( )' to manually transform the data type for each feature in the data frame. However, we know that as a default, R treats all features containing character strings as factors unless specified otherwise. We utilize this aspect of the programming language in this example to quickly convert all features containing character strings to factors by with the 'unclass( )' function and returning the result to the original data frame. After, we confirm that the data types have been converted correctly.
 
 ```{r}
 ## convert data types
@@ -165,7 +165,7 @@ str(mkt_cmpgn_data)
 <br>
 
 ## Descriptive Statistics
-As a measure of analytical prudence, we provide brief descriptive statistics for the features contained within the data frame 'mkt_cmpgn_data'. <br><br>
+As a measure of analytical prudence, we provide brief descriptive statistics for the features contained within the data frame 'mkt_cmpgn_data'.
 
 ```{r}
 ## descriptive stats
@@ -175,7 +175,7 @@ summary(mkt_cmpgn_data)
 
 ## Data Splitting
 
-Now that we have clean data, we split it into training and test sets. This allows us to compare and assess our results from Classification Trees, Random Forest, and Boosting. A prior step before we move forward with splitting our data into a training and test set, is specifying a random number with the function 'set.seed( )'. This allows our results to be reproducible for further analysis. After we begin at an established random number, we conduct splitting by calling the function 'sample( )'. <br><br>
+Now that we have clean data, we split it into training and test sets. This allows us to compare and assess our results from Classification Trees, Random Forest, and Boosting. A prior step before we move forward with splitting our data into a training and test set, is specifying a random number with the function 'set.seed( )'. This allows our results to be reproducible for further analysis. After we begin at an established random number, we conduct splitting by calling the function 'sample( )'.
 
 ```{r}
 ## random number
@@ -193,7 +193,7 @@ y.test = mkt_cmpgn_data$y[-train]  # create test y
 
 <h4> Training </h4>
 
-Here we begin to train the Classification Tree utilizing the 'tree( )' function. The function is simple, where the first argument contains the formula used in prediction (the dependent Y variable is the 'y' feature in data frame 'mkt_cmpg_data', the independent X variables are all other features, called by the period '.' before the tilde), the second argument specifies the data frame to call, and the third argument subsets 'mkt-cmpgn_data' to limit training only to the training set. <br><br>
+Here we begin to train the Classification Tree utilizing the 'tree( )' function. The function is simple, where the first argument contains the formula used in prediction (the dependent Y variable is the 'y' feature in data frame 'mkt_cmpg_data', the independent X variables are all other features, called by the period '.' before the tilde), the second argument specifies the data frame to call, and the third argument subsets 'mkt-cmpgn_data' to limit training only to the training set.
 
 ```{r}
 ## tree training
@@ -205,7 +205,7 @@ tree = tree(y ~.,  # training formula
 
 <h4> Feature Importance </h4>
 
-To help better interpret the Classification Tree results, we plot and inspect the tree diagram. Interpreting the results, the most important feature in this classification is 'euribor3m', where the observations are split at 1.2395 (first split). The second most important feature is 'pdays', where the observations are split at 513 (second split). Also, we see the 'euribor3m' feature again (second split). However, the split occurs at a different level in the observations at 3.1675. Recall the goal of this exercise is to predict whether or not the client would subscribe for a bank term deposit. Observe the outcomes, 'yes' or 'no'. Notice that the results 'yes' (the result we are interested in) fall under the tree at less than 1.2395 in 'euribor3m' and of those, only on those which are also less than 513 in 'pdays' result in 'yes'. Meaning, the lower the average inter-bank interest rate at which European banks are prepared to lend to one another ('euribor3m') and the lower the number of days that passed by after the client was last contacted from a previous campaign ('pday') were the most influential indicators of marketing effectiveness according to the Classification Tree model. This is important to consider when fitting a the Classification Tree model and at the next step in prediction. <br><br>
+To help better interpret the Classification Tree results, we plot and inspect the tree diagram. Interpreting the results, the most important feature in this classification is 'euribor3m', where the observations are split at 1.2395 (first split). The second most important feature is 'pdays', where the observations are split at 513 (second split). Also, we see the 'euribor3m' feature again (second split). However, the split occurs at a different level in the observations at 3.1675. Recall the goal of this exercise is to predict whether or not the client would subscribe for a bank term deposit. Observe the outcomes, 'yes' or 'no'. Notice that the results 'yes' (the result we are interested in) fall under the tree at less than 1.2395 in 'euribor3m' and of those, only on those which are also less than 513 in 'pdays' result in 'yes'. Meaning, the lower the average inter-bank interest rate at which European banks are prepared to lend to one another ('euribor3m') and the lower the number of days that passed by after the client was last contacted from a previous campaign ('pday') were the most influential indicators of marketing effectiveness according to the Classification Tree model. This is important to consider when fitting a the Classification Tree model and at the next step in prediction.
 
 ```{r}
 ## tree plotting
@@ -218,7 +218,7 @@ text(tree, cex = 0.75)
 
 <h4> Prediction </h4>
 
-After we trained the model, we utilize it for making predictions on the test set with the 'predict( )' function. Note that the 'type' argument is utilized in order to specify the prediction type. In this case, the type of prediction we're interested in is classification, indicated by the term "class". <br><br>
+After we trained the model, we utilize it for making predictions on the test set with the 'predict( )' function. Note that the 'type' argument is utilized in order to specify the prediction type. In this case, the type of prediction we're interested in is classification, indicated by the term "class".
 
 ```{r}
 ## tree prediction
@@ -230,7 +230,7 @@ tree_predict = predict(tree,
 
 <h4> Performance Evaluation </h4>
 
-Next, we evaluate the model's performance by calling the 'table( )' function and calculate the Test MSE. The results indicate a Test MSE of roughly 11.3%. Meaning, the model achieves a roughly 88.7% accuracy on whether or not the client would subscribe for a bank term deposit. Cool! <br><br>
+Next, we evaluate the model's performance by calling the 'table( )' function and calculate the Test MSE. The results indicate a Test MSE of roughly 11.3%. Meaning, the model achieves a roughly 88.7% accuracy on whether or not the client would subscribe for a bank term deposit. Cool!
 
 ```{r}
 ## tree prediction results
@@ -248,7 +248,7 @@ table(tree_predict, y.test)
 
 <b> Gini </b><br>
 
-As an alternative tree splitting method, the following serves as an experiment to test if we can improve the model's predictive accuracy by simply specifying a different splitting criteria. The following succinctly demonstrates the repetition of all previous analysis. However, uses 'gini' as the splitting criteria. The results indicate a Test MSE of roughly 12.4%. Meaning, the model achieves a roughly 87.6% accuracy on whether or not the client would subscribe to a bank term deposit. In other words, a reduction in the predictive performance of the model. <br><br>
+As an alternative tree splitting method, the following serves as an experiment to test if we can improve the model's predictive accuracy by simply specifying a different splitting criteria. The following succinctly demonstrates the repetition of all previous analysis. However, uses 'gini' as the splitting criteria. The results indicate a Test MSE of roughly 12.4%. Meaning, the model achieves a roughly 87.6% accuracy on whether or not the client would subscribe to a bank term deposit. In other words, a reduction in the predictive performance of the model.
 
 ```{r}
 ## tree training - gini
@@ -281,7 +281,7 @@ table(tree_predict_gini, y.test)
 
 <h4> Training </h4>
 
-Here we begin to train Random Forest utilizing the 'randomForest( )' function. The function is simple, where the first argument contains the formula used in prediction (the dependent Y variable is the 'y' feature in data frame 'mkt_cmpg_data', the independent X variables are all other features, called by the period '.' before the tilde), the second argument specifies the data frame to call, and the third argument subsets 'mkt-cmpgn_data' to limit training only to the training set. The fourth argument specifies the tuning parameter 'm' where it is set at a generally accepted square root of 'p' or the number of features in the data frame 'mkt_cmpgn_data'. Lastly, in the 'importance' argument, we specify the output of the feature importance. <br><br>
+Here we begin to train Random Forest utilizing the 'randomForest( )' function. The function is simple, where the first argument contains the formula used in prediction (the dependent Y variable is the 'y' feature in data frame 'mkt_cmpg_data', the independent X variables are all other features, called by the period '.' before the tilde), the second argument specifies the data frame to call, and the third argument subsets 'mkt-cmpgn_data' to limit training only to the training set. The fourth argument specifies the tuning parameter 'm' where it is set at a generally accepted square root of 'p' or the number of features in the data frame 'mkt_cmpgn_data'. Lastly, in the 'importance' argument, we specify the output of the feature importance.
 
 ```{r}
 ## random forest training
@@ -295,7 +295,7 @@ r_forest = randomForest(y ~.,  # training formula
 
 <h4> Feature Importance </h4>
 
-To help better interpret the Random Forest training results, we create a table and a corresponding plot that displays each features influence on the model. Interpreting the results, the most important feature is 'euribor3m', similar to the Classification Tree model. However the second most important feature is 'cons.price.idx', which tells us something different than the Classification Tree model, where the second most important feature was 'pdays' the number of days that passed by after the client was last contacted from a previous campaign. Meaning, the average inter-bank interest rate at which European banks are prepared to lend to one another ('euribor3m') and consumer price index ('cons.price.idx') were the most influential indicators of marketing effectiveness according to the Random Forest model. The following plot is measured by the decrease in mean accuracy. <br><br>
+To help better interpret the Random Forest training results, we create a table and a corresponding plot that displays each features influence on the model. Interpreting the results, the most important feature is 'euribor3m', similar to the Classification Tree model. However the second most important feature is 'cons.price.idx', which tells us something different than the Classification Tree model, where the second most important feature was 'pdays' the number of days that passed by after the client was last contacted from a previous campaign. Meaning, the average inter-bank interest rate at which European banks are prepared to lend to one another ('euribor3m') and consumer price index ('cons.price.idx') were the most influential indicators of marketing effectiveness according to the Random Forest model. The following plot is measured by the decrease in mean accuracy.
 
 ```{r}
 ## plot random forest feature importance 
@@ -313,7 +313,7 @@ importance(r_forest)
 
 <h4> Prediction </h4>
 
-After we trained the model, we utilize it for making predictions on the test set with the 'predict( )' function. Note that the 'type' argument is utilized in order to specify the prediction type. Similarly to the previous examples, the type of prediction we're interested in is classification, indicated by the term "class". <br><br>
+After we trained the model, we utilize it for making predictions on the test set with the 'predict( )' function. Note that the 'type' argument is utilized in order to specify the prediction type. Similarly to the previous examples, the type of prediction we're interested in is classification, indicated by the term "class".
 
 ```{r}
 ## random forest prediction
@@ -326,7 +326,7 @@ r_forest_predict = predict(r_forest,
 
 <h4> Performance Evaluation </h4>
 
-Next, we evaluate the model's performance by calling the 'table( )' function and calculate the Test MSE. Our results indicate a Test MSE of roughly 11.6%. Meaning, the model achieves a roughly 88.4% accuracy on whether or not the client would subscribe for a bank term deposit. There was no improvement, but rather a marginal reduction in the predictive performance in this model when compared to Random Forest. <br><br>
+Next, we evaluate the model's performance by calling the 'table( )' function and calculate the Test MSE. Our results indicate a Test MSE of roughly 11.6%. Meaning, the model achieves a roughly 88.4% accuracy on whether or not the client would subscribe for a bank term deposit. There was no improvement, but rather a marginal reduction in the predictive performance in this model when compared to Random Forest.
 
 ```{r}
 ## random forest prediction results 
@@ -344,7 +344,7 @@ table(r_forest_predict, y.test)
 
 <h4> Pre-Processing </h4>
 
-Before we proceed with Boosting with the 'gbm( )' function, the algorithm requires that our Y prediction 'y' is numeric. Since our the classification results we are predicting is binary, either 'yes' or 'no', we transform those observations in the 'y' feature to either 1 or 0, respectively. We apply this transformation to all data sets. <br><br>
+Before we proceed with Boosting with the 'gbm( )' function, the algorithm requires that our Y prediction 'y' is numeric. Since our the classification results we are predicting is binary, either 'yes' or 'no', we transform those observations in the 'y' feature to either 1 or 0, respectively. We apply this transformation to all data sets.
 
 ```{r}
 ## training set
@@ -387,7 +387,7 @@ y.test = as.numeric(y.test)
 
 <h4>Training</h4>
 
-Here we begin training the Boosting model utilizing the 'gbm( )' function. The first argument contains the formula used in prediction (the dependent Y variable is the 'y' feature in data frame 'mkt_cmpg_data', the independent X variables are all other features, called by the period '.' before the tilde), the second argument specifies the data frame to call. The 'distribution' argument specified here as 'bernoulli', which is required for classification. If we were interested in regression, the argument would be more appropriately specified as 'gaussian', as a normal distribution. The argument 'n.trees' specifies the number of trees to create. In this case we somewhat arbitrarily choose 10,000. We do not test the optimal number of trees here, as it is outside of the scope of this study. However, it is a prudent number of trees and falls within the recommended range according the algorithms documentation. The argument 'interaction.depth' indicates the tree depth we establish at 3, which also falls within the recommended range. In our finally argument, we establish the tuning parameter lambda to slightly shrink our coefficient estimates, introducing bias, but in anticipation for decreased variance in the Test MSE. <br><br>
+Here we begin training the Boosting model utilizing the 'gbm( )' function. The first argument contains the formula used in prediction (the dependent Y variable is the 'y' feature in data frame 'mkt_cmpg_data', the independent X variables are all other features, called by the period '.' before the tilde), the second argument specifies the data frame to call. The 'distribution' argument specified here as 'bernoulli', which is required for classification. If we were interested in regression, the argument would be more appropriately specified as 'gaussian', as a normal distribution. The argument 'n.trees' specifies the number of trees to create. In this case we somewhat arbitrarily choose 10,000. We do not test the optimal number of trees here, as it is outside of the scope of this study. However, it is a prudent number of trees and falls within the recommended range according the algorithms documentation. The argument 'interaction.depth' indicates the tree depth we establish at 3, which also falls within the recommended range. In our finally argument, we establish the tuning parameter lambda to slightly shrink our coefficient estimates, introducing bias, but in anticipation for decreased variance in the Test MSE.
 
 ```{r}
 ## boosting training
@@ -402,7 +402,7 @@ boost = gbm(y ~.,
 
 <h4> Feature Importance </h4>
 
-To help better interpret the Boosting training results, we plot each features influence on the model from its corresponding table. Exhibited here are the relative influences of each feature. Interpreting the results, the most important feature is 'euribor3m', similar to the Classification Tree and Random Forest models. However, the second most important feature is 'pday', which tells us something different than the Random Forest model, where the second most important feature was the consumer price index ('cons.price.idx'). Yet, it tells us something similar to the Classification Tree model, where the second most important feature was also 'pday'. Meaning, the average inter-bank interest rate at which European banks are prepared to lend to one another ('euribor3m') and the number of days that passed by after the client was last contacted from a previous campaign ('pday') were the most influential indicators of marketing effectiveness according to the Boosting model. Perhaps there is something to be gleaned from the similarity in the two most important features from 2 out of the 3 models? The following plot is measured by the decrease in mean accuracy. <br><br>
+To help better interpret the Boosting training results, we plot each features influence on the model from its corresponding table. Exhibited here are the relative influences of each feature. Interpreting the results, the most important feature is 'euribor3m', similar to the Classification Tree and Random Forest models. However, the second most important feature is 'pday', which tells us something different than the Random Forest model, where the second most important feature was the consumer price index ('cons.price.idx'). Yet, it tells us something similar to the Classification Tree model, where the second most important feature was also 'pday'. Meaning, the average inter-bank interest rate at which European banks are prepared to lend to one another ('euribor3m') and the number of days that passed by after the client was last contacted from a previous campaign ('pday') were the most influential indicators of marketing effectiveness according to the Boosting model. Perhaps there is something to be gleaned from the similarity in the two most important features from 2 out of the 3 models? The following plot is measured by the decrease in mean accuracy.
 
 ```{r}
 ## preview boosting feature importance 
@@ -415,7 +415,7 @@ summary(boost,
 
 <h4> Prediction </h4>
 
-After we trained the model, we utilize it for making predictions on the test set. Note that the 'type' argument is utilized in order to specify the prediction type. In this case, the type of prediction we're interested in is classification. However, unlike Classification Trees and Random Forest, where our prediction was a factor indicated by the term "class", we need to specify "response" as our prediction in numerical terms. Also, because of the application of Boosting, we specify the same number of trees utilized in fitting the model (10,000). As a final step in Boosting prediction, we round our results to either 1 or 0. <br><br>
+After we trained the model, we utilize it for making predictions on the test set. Note that the 'type' argument is utilized in order to specify the prediction type. In this case, the type of prediction we're interested in is classification. However, unlike Classification Trees and Random Forest, where our prediction was a factor indicated by the term "class", we need to specify "response" as our prediction in numerical terms. Also, because of the application of Boosting, we specify the same number of trees utilized in fitting the model (10,000). As a final step in Boosting prediction, we round our results to either 1 or 0.
 
 ```{r}
 ## boosting prediction
@@ -431,7 +431,7 @@ boost_predict = round(boost_predict)
 
 <h4> Performance Evaluation </h4>
 
-Next, we evaluate the model's performance by calling the 'table( )' function and calculate the Test MSE. The results indicate a Test MSE of roughly 11.2%. Meaning, the model achieves a roughly 88.8% accuracy on whether or not the client would subscribe for a bank term deposit. There was a marginal improvement in the predictive performance in this model when compared to both Classification Trees and Random Forest. <br><br>
+Next, we evaluate the model's performance by calling the 'table( )' function and calculate the Test MSE. The results indicate a Test MSE of roughly 11.2%. Meaning, the model achieves a roughly 88.8% accuracy on whether or not the client would subscribe for a bank term deposit. There was a marginal improvement in the predictive performance in this model when compared to both Classification Trees and Random Forest.
 
 ```{r}
 ## boosting prediction results 
@@ -448,7 +448,7 @@ table(boost_predict, y.test)
 
 ## Results & Discussion
 
-Examining the Test MSE results from Classification Trees, Random Forest, and Boosting, the model that achieved the lowest Test MSE (highest predictive accuracy) is the Boosting model. The Boosting model resulted in a Test MSE of roughly 11.2%. The Classification Tree model performed only slightly worse with the Test MSE of roughly 11.3%. The Random Forest model had similar performance, yet slightly worse than the rest with a Test MSE of roughly 11.6%. It is important to consider that these differences are marginal and the computational cost in achieving them should also be considered. Although the Boosting model achieved the highest predictive performance, it is generally more computationally expensive than the Classification Tree model. Calculating the computational cost is beyond the scope of this discussion. However, the speed at which these results cannot be dismissed; especially in another application, marketing or otherwise. As a recommendation for this application, Classification Trees might be appropriate. With only a marginal loss in predictive accuracy, Classification Trees achieve relative predictive quality and are computationally inexpensive when compared to Random Forest and Boosting. <br><br>
+Examining the Test MSE results from Classification Trees, Random Forest, and Boosting, the model that achieved the lowest Test MSE (highest predictive accuracy) is the Boosting model. The Boosting model resulted in a Test MSE of roughly 11.2%. The Classification Tree model performed only slightly worse with the Test MSE of roughly 11.3%. The Random Forest model had similar performance, yet slightly worse than the rest with a Test MSE of roughly 11.6%. It is important to consider that these differences are marginal and the computational cost in achieving them should also be considered. Although the Boosting model achieved the highest predictive performance, it is generally more computationally expensive than the Classification Tree model. Calculating the computational cost is beyond the scope of this discussion. However, the speed at which these results cannot be dismissed; especially in another application, marketing or otherwise. As a recommendation for this application, Classification Trees might be appropriate. With only a marginal loss in predictive accuracy, Classification Trees achieve relative predictive quality and are computationally inexpensive when compared to Random Forest and Boosting.
 
 ```{r}
 ## calculate test mse - trees
