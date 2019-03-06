@@ -1,6 +1,4 @@
-
 ## Preface
-
 Included in this repo is the RMarkdown document with the code used to create this README.md (excludes this Preface section and plot image links). Also included here is the R code containing only the requirements for analytical reproduction (excludes the narrative) and a printable pdf (formated). In addition, the images folder provides all the plots generated. Enjoy!
 <br><br>
 
