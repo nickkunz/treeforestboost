@@ -259,8 +259,6 @@ tree_gini = tree(y ~.,  # training formula
 plot(tree_gini)
 text(tree_gini, cex = 0.75)
 
-![tree_gini.png](https://github.com/nickkunz/treeforestboost/blob/master/images/tree_gini.png)
-
 ## tree prediction - gini
 tree_predict_gini = predict(tree_gini, test, type = "class")
 
