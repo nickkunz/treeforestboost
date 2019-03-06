@@ -13,7 +13,7 @@ This exercise briefly explores the topic of Marketing as it relates to Machine L
 <br><br>
 
 ## Requirements
-First, we load the libraries 'tree', 'randomForest', and 'gbm'. The 'tree' library contains the 'tree( )' function, which is required to conduct Classification Tree regression. The 'randomForest' library contains the 'randomForest( )' function, which is required to conduct Random Forest. The library 'gbm' contains the 'gbm( )' function, which is required for Boosting. <br><br>
+First, we load the libraries 'tree', 'randomForest', and 'gbm'. The 'tree' library contains the 'tree( )' function, which is required to conduct Classification Tree regression. The 'randomForest' library contains the 'randomForest( )' function, which is required to conduct Random Forest. The library 'gbm' contains the 'gbm( )' function, which is required for Boosting.
 
 ```{r message=FALSE, warning=FALSE}
 ## load libraries
