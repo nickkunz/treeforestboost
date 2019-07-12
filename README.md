@@ -3,7 +3,7 @@ Included in this repo is the RMarkdown document with the code used to create thi
 <br><br>
 
 ## Introduction
-This exercise briefly explores the topic of Marketing as it relates to Machine Learning. It broadly serves as an exploratory exercise, exclusively focusing on Classification Trees, Random Forest, and Boosting. The objective is to use these prediction methods to identify customers that have high purchase intent to direct marketing campaigns. The exercise assumes a conceptual understanding of Classification Trees, Random Forest, and Boosting. This work was completed in partial fulfillment for the course Machine Learning for Finance & Marketing at Columbia Business School in 2019 with Dr. Lentzas and is based on the paper by Moro, Cortez, and Rita, ”A Data-Driven Approach to Predict the Success of Bank Telemarketing” Decision Support Systems, Elsevier, 62:22-31, June 2014.
+This exercise briefly explores the topic of Marketing as it relates to Machine Learning. It broadly serves as an exploratory exercise, exclusively focusing on Classification Trees, Random Forest, and Gradient Boosting. The objective is to use these prediction methods to identify customers that have high purchase intent to direct marketing campaigns. The exercise assumes a conceptual understanding of Classification Trees, Random Forest, and Boosting. This work was completed in partial fulfillment for the course Machine Learning for Finance & Marketing at Columbia Business School in 2019 with Dr. Lentzas and is based on the paper by Moro, Cortez, and Rita, ”A Data-Driven Approach to Predict the Success of Bank Telemarketing” Decision Support Systems, Elsevier, 62:22-31, June 2014.
 <br><br>
 
 ## Background
